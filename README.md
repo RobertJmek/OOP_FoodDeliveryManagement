@@ -35,3 +35,26 @@ Platforma suportă următoarele operațiuni principale:
 ## 🛠️ Tehnologii Utilizate
 * **Limbaj:** Java
 * **Concepte:** OOP (Inheritance, Polymorphism, Encapsulation), Collections Framework (ArrayList, TreeSet), Enums.
+
+
+## Structura proiectului(separarea logicii de business si a modelului):
+
+src/
+└── ro/unibuc/fooddelivery/ (sau orice alt nume de pachet de bază alegi)
+    │
+    ├── models/                 
+    │   ├── Utilizator.java
+    │   ├── Client.java
+    │   ├── Sofer.java
+    │   ├── Manager.java
+    │   ├── Local.java
+    │   ├── Produs.java
+    │   ├── Comanda.java
+    │   ├── Recenzie.java
+    │   └── StareComanda.java   (Enum-ul)
+    │
+    ├── services/              
+    │   └── FoodDeliveryService.java
+    │
+    └── main/                  
+        └── Main.java
