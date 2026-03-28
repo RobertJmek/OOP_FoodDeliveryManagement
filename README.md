@@ -39,8 +39,9 @@ Platforma suportă următoarele operațiuni principale:
 
 ## Structura proiectului(separarea logicii de business si a modelului):
 
+```text
 src/
-└── ro/unibuc/fooddelivery/ (sau orice alt nume de pachet de bază alegi)
+└── food_delivery_system/ 
     │
     ├── models/                 
     │   ├── Utilizator.java
@@ -53,8 +54,9 @@ src/
     │   ├── Recenzie.java
     │   └── StareComanda.java   (Enum-ul)
     │
-    ├── services/              
+    ├── services/               
     │   └── FoodDeliveryService.java
     │
-    └── main/                  
+    └── main/                   
         └── Main.java
+```
