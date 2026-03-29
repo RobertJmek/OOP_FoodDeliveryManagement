@@ -60,3 +60,66 @@ src/
     └── main/                   
         └── Main.java
 ```
+
+# ENGLISH VERSION:
+
+## Food Delivery Management System 🍔🚚
+
+A backend system for managing a food delivery platform, developed in Java. This project demonstrates the practical application of fundamental Object-Oriented Programming (OOP) principles, such as inheritance, polymorphism, encapsulation, and the use of collections (List, Set) for data flow management.
+
+## 📦 System Architecture (Classes / Objects)
+
+The system is built around 8 main entities, structured hierarchically:
+
+1. **`User`** - Base class (abstract) for all actors in the platform.
+2. **`Customer`** - Inherits from `User`; represents the customers who place orders.
+3. **`Driver`** - Inherits from `User`; manages availability and the delivery vehicle.
+4. **`Manager`** - Inherits from `User`; has administrative rights over a specific restaurant/venue.
+5. **`Restaurant`** - Represents the restaurant/vendor that owns a menu.
+6. **`Product`** - An item from the menu (implements `Comparable` for automatic sorting).
+7. **`Order`** - The central entity linking a `Customer`, a `Restaurant`, the products, a `Driver`, and the current delivery status.
+8. **`Review`** - Allows customers to leave a rating and a comment after completing an order.
+
+## ⚙️ Features and Queries (Actions)
+
+The platform supports the following main operations:
+
+1. **Registering a new user** (`Customer`, `Driver`, or `Manager`) with personal data.
+2. **Adding a new restaurant** to the platform and associating it with a `Manager`.
+3. **Menu management** (adding products), an action permitted with strict validation only for the `Manager` of that specific restaurant.
+4. **Querying a restaurant's menu** to display all available products, sorted alphabetically.
+5. **Searching for a restaurant** in the platform based on its name.
+6. **Placing an order** by a `Customer`, including the automatic calculation of the total cost of the products.
+7. **Querying the list of available drivers** (filtering drivers who are not assigned to another delivery).
+8. **Assigning an available driver** to a newly placed order.
+9. **Updating the status of an order** throughout the flow (Placed -> In Preparation -> Picked Up -> Delivered).
+10. **Querying the order history** to display the past activity of a specific `Customer`.
+11. **Adding a review** (rating and text) by a `Customer` for a restaurant.
+12. **Displaying the reviews** left for a specific restaurant.
+
+## 🛠️ Technologies Used
+* **Language:** Java
+* **Concepts:** OOP (Inheritance, Polymorphism, Encapsulation), Collections Framework (ArrayList, TreeSet), Enums.
+
+## Project Structure (separating business logic from the model):
+
+```text
+src/
+└── food_delivery_system/ 
+    │
+    ├── models/                 
+    │   ├── User.java
+    │   ├── Customer.java
+    │   ├── Driver.java
+    │   ├── Manager.java
+    │   ├── Restaurant.java
+    │   ├── Product.java
+    │   ├── Order.java
+    │   ├── Review.java
+    │   └── OrderStatus.java   (The Enum)
+    │
+    ├── services/               
+    │   └── FoodDeliveryService.java
+    │
+    └── main/                   
+        └── Main.java
