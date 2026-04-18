@@ -11,6 +11,12 @@ public class Customer extends User {
     }
 
     public void addAddress(String address){
+        if ( address == null || address.isEmpty()) {
+            throw new IllegalArgumentException("Adresa nu poate fi null sau gol!");
+        }
+        if (addresses.contains(address)) {
+            throw new IllegalArgumentException("Adresa exista deja!");
+        }
         addresses.add(address);
     }
 
@@ -22,18 +28,20 @@ public class Customer extends User {
         addresses.remove(address);
     }
 
-    public String getPrefferedAddress(){
+    public String getPreferredAddress(){
         if(addresses.isEmpty())
             return null;
         return addresses.getFirst();
     }
 
-    public void setPrefferedAddress(String address){
+    public void setPreferredAddress(String address){
         if(addresses.contains(address)) {
             addresses.remove(address);
             addresses.addFirst(address);
         }
-
+        else {
+            throw new IllegalArgumentException("Adresa nu există în lista clientului!");
+        }
     }
 
     @Override
