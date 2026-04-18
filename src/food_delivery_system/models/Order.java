@@ -2,6 +2,7 @@ package food_delivery_system.models;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Order {
     private static int idGenerator = 0;
@@ -33,7 +34,7 @@ public class Order {
         this.id = ++idGenerator;
         this.customer = customer;
         this.restaurant = restaurant;
-        this.products = products;
+        this.products = new ArrayList<>(products);
         this.discount = 0.0;
         this.deliveryFee = deliveryFee;
 
@@ -114,7 +115,7 @@ public class Order {
     }
 
     public List<Product> getProducts() {
-        return products;
+        return Collections.unmodifiableList(products);
     }
 
     public double getDiscount() {

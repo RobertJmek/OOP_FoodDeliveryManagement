@@ -2,6 +2,8 @@ package food_delivery_system.models;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Restaurant {
     private static int idGenerator = 0;
@@ -31,9 +33,23 @@ public class Restaurant {
         this.description = description;
         this.imageUrl = imageUrl;
         this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
         this.website = website;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || !phoneNumber.matches("^\\d{10}$")) {
+            throw new IllegalArgumentException("Invalid phone number! It must contain exactly 10 digits.");
+        }
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Invalid email format!");
+        }
+        this.email = email;
     }
 
     public void addMenu(Menu menu){
@@ -46,13 +62,13 @@ public class Restaurant {
         reviews.add(review);
     }
     public List<Menu> getMenus(){
-        return menus;
+        return Collections.unmodifiableList(menus);
     }
     public List<Manager> getManagers(){
-        return managers;
+        return Collections.unmodifiableList(managers);
     }
     public List<Review> getReviews(){
-        return reviews;
+        return Collections.unmodifiableList(reviews);
     }
     public String getName() { return name; }
     public String getDescription() { return description; }

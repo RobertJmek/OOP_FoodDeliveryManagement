@@ -1,6 +1,8 @@
 package food_delivery_system.models;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Customer extends User {
     private List<String> addresses;
@@ -21,10 +23,13 @@ public class Customer extends User {
     }
 
     public List<String> getAddresses(){
-        return addresses;
+        return Collections.unmodifiableList(addresses);
     }
 
     public void removeAddress(String address){
+        if (!addresses.contains(address)) {
+            throw new IllegalArgumentException("Adresa nu exista in lista!");
+        }
         addresses.remove(address);
     }
 

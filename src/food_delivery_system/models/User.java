@@ -14,8 +14,8 @@ public abstract class User {
 
     protected User(String firstName, String lastName, String phoneNumber, String email) {
         this();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        setFirstName(firstName);
+        setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setEmail(email);
     }
@@ -43,11 +43,17 @@ public abstract class User {
     public abstract String getFullName();
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (firstName == null || firstName.trim().isEmpty()) {
+            throw new IllegalArgumentException("First name cannot be null or empty!");
+        }
+        this.firstName = firstName.trim();
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (lastName == null || lastName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Last name cannot be null or empty!");
+        }
+        this.lastName = lastName.trim();
     }
 
     public void setPhoneNumber(String phoneNumber) {

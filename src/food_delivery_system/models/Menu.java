@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Menu {
     private Map<String, List<Product>> products;
@@ -27,7 +29,7 @@ public class Menu {
     }
 
     public List<Product> getProducts(String category) {
-        return products.getOrDefault(category, new ArrayList<>());
+        return Collections.unmodifiableList(products.getOrDefault(category, new ArrayList<>()));
     }
 
     public List<String> getCategories() {
