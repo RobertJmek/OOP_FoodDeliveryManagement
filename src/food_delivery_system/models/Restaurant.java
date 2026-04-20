@@ -38,27 +38,64 @@ public class Restaurant {
         this.website = website;
     }
 
+    public void addProductToMenu(int menuId, String category, Product product) {
+        if (product == null || category == null || category.isBlank()) {
+            throw new IllegalArgumentException("Produsul și categoria sunt obligatorii!");
+        }
+        boolean menuFound = false;
+        for (Menu menu : menus) {
+            if (menu.getId() == menuId) {
+                menu.addProduct(category, product);
+                menuFound = true;
+                break;
+            }
+        }
+        if (!menuFound) {
+            throw new IllegalArgumentException("❌ Eroare: Meniul cu ID-ul " + menuId + " nu aparține de restaurantul " + this.name);
+        }
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber == null || !phoneNumber.matches("^\\d{10}$")) {
             throw new IllegalArgumentException("Invalid phone number! It must contain exactly 10 digits.");
         }
         this.phoneNumber = phoneNumber;
     }
-
     public void setEmail(String email) {
         if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new IllegalArgumentException("Invalid email format!");
         }
         this.email = email;
     }
+    public void setWebsite(String website) {
+        if (website == null || !website.matches("^https?://.+")) {
+            throw new IllegalArgumentException("Invalid website format!");
+        }
+        this.website = website;
+    }
+    public void setName(String name) { this.name = name; }
+    public void setDescription(String description) { this.description = description; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setAddress(String address) { this.address = address; }
+    public Menu addMenu(String menuName) {
+        if (menuName == null || menuName.isBlank()) {
+            throw new IllegalArgumentException("Numele meniului este obligatoriu!");
+        }
+        Menu newMenu = new Menu(menuName);
+        menus.add(newMenu);
 
-    public void addMenu(Menu menu){
-        menus.add(menu);
+        return newMenu;
     }
     public void addManager(Manager manager){
+        if (manager == null) {
+            throw new IllegalArgumentException("Manager-ul nu poate fi null!");
+        }
         managers.add(manager);
     }
     public void addReview(Review review){
+        if (review == null) {
+            throw new IllegalArgumentException("Review-ul nu poate fi null!");
+        }
         reviews.add(review);
     }
     public List<Menu> getMenus(){

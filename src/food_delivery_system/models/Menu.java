@@ -13,13 +13,9 @@ public class Menu {
     private final int id;
     private String name;
 
-    private Menu() {
+    Menu(String name) {
         id = ++idGenerator;
         products = new HashMap<>();
-    }
-
-    public Menu(String name) {
-        this();
         this.name = name;
     }
 
