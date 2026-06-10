@@ -1,13 +1,14 @@
 package food_delivery_system.main;
 
+import food_delivery_system.config.DatabaseConnection;
 import food_delivery_system.models.*;
 import food_delivery_system.services.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
+
+
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -22,15 +23,16 @@ public class Main {
     public static final String CYAN = "\u001B[36m";
     public static final String BOLD = "\u001B[1m";
 
-    // Inițializarea serviciilor (Baza de Date în memorie)
+    // Servicii — backed by MySQL via DatabaseHelper
     private static final FoodDeliveryService foodDeliveryService = new FoodDeliveryService();
     private static final UserService userService = foodDeliveryService.getUserService();
     private static final RestaurantService restaurantService = foodDeliveryService.getRestaurantService();
     private static final OrderService orderService = foodDeliveryService.getOrderService();
 
     public static void main(String[] args) {
-        // Populăm cu niște date inițiale ca să avem cu ce testa
-        initDummyData();
+        // Initialize DB connection and auto-create schema
+        DatabaseConnection.getInstance();
+
 
         boolean running = true;
         while (running) {
@@ -181,7 +183,6 @@ public class Main {
             System.out.println("Meniu #" + m.getId() + ": " + m.getName());
             for (String category : m.getCategories()) {
                 System.out.println("  >> Categoria: " + category);
-                // Printăm produsele sortate alfabetic (Product trebuie să implementeze Comparable if specified, altfel manual)
                 List<Product> prods = new ArrayList<>(m.getProducts(category));
                 prods.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
                 for (Product p : prods) {
@@ -189,6 +190,7 @@ public class Main {
                 }
             }
         }
+        AuditService.getInstance().logAction("QUERY_MENU");
     }
 
     // --- 5. CĂUTARE RESTAURANT ---
@@ -207,6 +209,7 @@ public class Main {
                 System.out.println(" - ID " + r.getId() + " | " + r.getName() + " | " + r.getAddress());
             }
         }
+        AuditService.getInstance().logAction("SEARCH_RESTAURANT");
     }
 
     // --- 6. PLASARE COMANDĂ ---
@@ -282,6 +285,7 @@ public class Main {
                 System.out.println(" - " + d.getFullName() + " (ID: " + d.getId() + ")");
             }
         }
+        AuditService.getInstance().logAction("QUERY_AVAILABLE_DRIVERS");
     }
 
     // --- 8. ASIGNARE ȘOFER ---
@@ -330,6 +334,7 @@ public class Main {
                 System.out.println(" - Comanda #" + o.getId() + " | Local: " + o.getRestaurant().getName() + " | Status: " + o.getStatus() + " | Total: " + o.calculateTotalToPay() + " RON");
             }
         }
+        AuditService.getInstance().logAction("QUERY_ORDER_HISTORY");
     }
 
     // --- 11. ADĂUGARE RECENZIE ---
@@ -351,6 +356,7 @@ public class Main {
         Review rev = new Review((Customer) user, comment, rating);
         r.addReview(rev);
         System.out.println("✅ Recenzia a fost salvată cu succes!");
+        AuditService.getInstance().logAction("ADD_REVIEW");
     }
 
     // --- 12. AFIȘARE RECENZII ---
@@ -369,6 +375,7 @@ public class Main {
                 System.out.println(" ⭐ " + rev.getRating() + "/5 | " + rev.getCustomer().getFullName() + " a scris: " + rev.getComment());
             }
         }
+        AuditService.getInstance().logAction("DISPLAY_REVIEWS");
     }
 
     // ==========================================
@@ -404,29 +411,4 @@ public class Main {
         return scanner.nextLine().trim();
     }
 
-    private static void initDummyData() {
-        System.out.println("\n" + GREEN + BOLD + "[Sistem] Inițializare date dummy..." + RESET);
-
-        Customer c1 = new Customer("Ion", "Popescu", "0722111222", "ion@email.com");
-        c1.addAddress("Str. Mare nr. 1");
-        Driver d1 = new Driver("Alex", "Viteza", "0733444555", "alex@soferi.ro");
-        Manager m1 = new Manager("Ana", "Sef", "0744777888", "ana@manager.ro");
-
-        userService.registerUser(c1);
-        userService.registerUser(d1);
-        userService.registerUser(m1);
-
-        Restaurant r1 = new Restaurant("Burger Joint", "Top Burgers", "img", "Centru", "0711000111", "contact@burger.ro", "http://www.burgerjoint.ro");
-        r1.addManager(m1);
-        Menu MeniuZi = r1.addMenu("Meniu Zi");
-        restaurantService.addRestaurant(r1);
-
-        Product p1 = new Product("Cheeseburger", "Standard", 45.0);
-        Product p2 = new Product("Cartofi", "Prajiti", 15.0);
-
-        restaurantService.addProductToRestaurantMenu(r1.getId(), MeniuZi.getId(), "Burgeri", p1);
-        restaurantService.addProductToRestaurantMenu(r1.getId(), MeniuZi.getId(), "Garnituri", p2);
-
-        System.out.println(GREEN + BOLD + "[Sistem] Date dummy încărcate! Meniul complet este pregătit.\n" + RESET);
-    }
 }

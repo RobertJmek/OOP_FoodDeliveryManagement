@@ -6,8 +6,11 @@ public class Manager extends User{
         super(firstName, lastName, phoneNumber, email);
     }
 
-    @Override
+    public Manager(int id, String firstName, String lastName, String phoneNumber, String email) {
+        super(id, firstName, lastName, phoneNumber, email);
+    }
+
     public String getFullName() {
-        return "Manager: " + getFirstName() + " " + getLastName();
+        return getFirstName() + " " + getLastName();
     }
 }

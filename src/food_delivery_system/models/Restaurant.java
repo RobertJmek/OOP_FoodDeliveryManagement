@@ -6,8 +6,7 @@ import java.util.Collections;
 
 
 public class Restaurant {
-    private static int idGenerator = 0;
-    private final int id;
+    private int id;
     private String name;
     private String description;
     private String imageUrl;
@@ -20,15 +19,7 @@ public class Restaurant {
     private List<Manager> managers;
     private List<Review> reviews;
 
-    private Restaurant() {
-        id = ++idGenerator;
-        menus = new ArrayList<>();
-        managers = new ArrayList<>();
-        reviews = new ArrayList<>();
-    }
-
     public Restaurant(String name, String description, String imageUrl, String address, String phoneNumber, String email, String website) {
-        this();
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -36,6 +27,23 @@ public class Restaurant {
         setPhoneNumber(phoneNumber);
         setEmail(email);
         this.website = website;
+        menus = new ArrayList<>();
+        managers = new ArrayList<>();
+        reviews = new ArrayList<>();
+    }
+
+    public Restaurant(int id, String name, String description, String imageUrl, String address, String phoneNumber, String email, String website) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.address = address;
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        this.website = website;
+        menus = new ArrayList<>();
+        managers = new ArrayList<>();
+        reviews = new ArrayList<>();
     }
 
     public void addProductToMenu(int menuId, String category, Product product) {
@@ -86,6 +94,13 @@ public class Restaurant {
 
         return newMenu;
     }
+
+    public void addLoadedMenu(Menu menu) {
+        if (menu == null) throw new IllegalArgumentException("Meniu null!");
+        menus.add(menu);
+    }
+
+
     public void addManager(Manager manager){
         if (manager == null) {
             throw new IllegalArgumentException("Manager-ul nu poate fi null!");
@@ -115,6 +130,9 @@ public class Restaurant {
     public String getEmail() { return email; }
     public String getWebsite() { return website; }
     public Integer getId() { return id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
 
 }

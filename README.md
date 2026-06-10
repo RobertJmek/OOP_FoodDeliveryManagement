@@ -35,17 +35,45 @@ Platforma suportă (și va implementa până la finalul dezvoltării) următoare
 12. **Afișarea recenziilor** lăsate pentru un anumit local.
 
 ## 🛠️ Tehnologii Utilizate
-* **Limbaj:** Java
-* **Concepte:** OOP (Inheritance, Polymorphism, Encapsulation îmbunătățită contra mutațiilor externe), Collections Framework (ArrayList, HashMap), Enums.
+* **Limbaj:** Java 17
+* **Persistență:** JDBC + MySQL (via Docker)
+* **Build:** Maven
+* **Concepte:** OOP (Moștenire, Polimorfism, Încapsulare), Collections Framework (ArrayList, HashMap), Enums, Singleton Pattern.
 
+## 📋 Audit Service
 
-## Structura proiectului (separarea logicii de business si a modelului):
+Fiecare acțiune din sistem este înregistrată automat în fișierul `audit.csv` la rădăcina proiectului, cu structura: `action_name,timestamp`.
+
+| # | Acțiune | Cod acțiune | Înregistrat în |
+|---|---|---|---|
+| 1 | Înregistrare utilizator | `REGISTER_USER` | `UserService.registerUser()` |
+| 2 | Adăugare restaurant | `ADD_RESTAURANT` | `RestaurantService.addRestaurant()` |
+| 3 | Adăugare produs în meniu | `ADD_PRODUCT_TO_MENU` | `RestaurantService.addProductToRestaurantMenu()` |
+| 4 | Interogare meniu | `QUERY_MENU` | `Main.handleQueryMenu()` |
+| 5 | Căutare restaurant | `SEARCH_RESTAURANT` | `Main.handleSearchRestaurant()` |
+| 6 | Plasare comandă | `PLACE_ORDER` | `OrderService.placeOrder()` |
+| 7 | Interogare șoferi disponibili | `QUERY_AVAILABLE_DRIVERS` | `Main.handleAvailableDrivers()` |
+| 8 | Asignare șofer | `ASSIGN_DRIVER` | `OrderService.assignDriverToOrder()` |
+| 9 | Actualizare status comandă | `UPDATE_ORDER_STATUS` | `OrderService.updateOrderStatus()` |
+| 10 | Istoric comenzi | `QUERY_ORDER_HISTORY` | `Main.handleOrderHistory()` |
+| 11 | Adăugare recenzie | `ADD_REVIEW` | `Main.handleAddReview()` |
+| 12 | Afișare recenzii | `DISPLAY_REVIEWS` | `Main.handleDisplayReviews()` |
+
+## Structura proiectului:
 
 ```text
+.
+├── .env                          # DB credentials (gitignored)
+├── audit.csv                     # Audit log (auto-generated)
+├── pom.xml                       # Maven build + dependencies
+├── Dockerfile                    # MySQL Docker image
 src/
-└── food_delivery_system/ 
-    │
-    ├── models/                 
+└── food_delivery_system/
+    ├── config/
+    │   ├── DatabaseConnection.java   # Singleton JDBC connection + schema init
+    │   ├── DatabaseHelper.java       # Generic singleton for executeQuery/executeUpdate
+    │   └── RowMapper.java            # Functional interface for ResultSet mapping
+    ├── models/
     │   ├── User.java
     │   ├── Customer.java
     │   ├── Driver.java
@@ -56,16 +84,16 @@ src/
     │   ├── Order.java
     │   ├── Review.java
     │   └── OrderStatus.java
-    │
-    ├── services/               
+    ├── services/
+    │   ├── AuditService.java         # Singleton, appends to audit.csv
     │   ├── FoodDeliveryService.java
     │   ├── OrderService.java
     │   ├── RestaurantService.java
     │   └── UserService.java
-    │
-    └── main/                   
+    └── main/
         └── Main.java
 ```
+
 
 ## 🗄️ Configurare Bază de Date (MySQL & Docker)
 
@@ -135,16 +163,45 @@ The platform supports (and aims to implement by the end of development) the foll
 12. **Displaying the reviews** left for a specific restaurant.
 
 ## 🛠️ Technologies Used
-* **Language:** Java
-* **Concepts:** OOP (Inheritance, Polymorphism, rigorous Encapsulation), Collections Framework (ArrayList, HashMap), Enums.
+* **Language:** Java 17
+* **Persistence:** JDBC + MySQL (via Docker)
+* **Build:** Maven
+* **Concepts:** OOP (Inheritance, Polymorphism, rigorous Encapsulation), Collections Framework (ArrayList, HashMap), Enums, Singleton Pattern.
 
-## Project Structure (separating business logic from the model):
+## 📋 Audit Service
+
+Every action in the system is automatically logged to `audit.csv` at the project root, with the format: `action_name,timestamp`.
+
+| # | Action | Action Code | Logged in |
+|---|---|---|---|
+| 1 | Register user | `REGISTER_USER` | `UserService.registerUser()` |
+| 2 | Add restaurant | `ADD_RESTAURANT` | `RestaurantService.addRestaurant()` |
+| 3 | Add product to menu | `ADD_PRODUCT_TO_MENU` | `RestaurantService.addProductToRestaurantMenu()` |
+| 4 | Query menu | `QUERY_MENU` | `Main.handleQueryMenu()` |
+| 5 | Search restaurant | `SEARCH_RESTAURANT` | `Main.handleSearchRestaurant()` |
+| 6 | Place order | `PLACE_ORDER` | `OrderService.placeOrder()` |
+| 7 | Query available drivers | `QUERY_AVAILABLE_DRIVERS` | `Main.handleAvailableDrivers()` |
+| 8 | Assign driver | `ASSIGN_DRIVER` | `OrderService.assignDriverToOrder()` |
+| 9 | Update order status | `UPDATE_ORDER_STATUS` | `OrderService.updateOrderStatus()` |
+| 10 | Order history | `QUERY_ORDER_HISTORY` | `Main.handleOrderHistory()` |
+| 11 | Add review | `ADD_REVIEW` | `Main.handleAddReview()` |
+| 12 | Display reviews | `DISPLAY_REVIEWS` | `Main.handleDisplayReviews()` |
+
+## Project Structure:
 
 ```text
+.
+├── .env                          # DB credentials (gitignored)
+├── audit.csv                     # Audit log (auto-generated)
+├── pom.xml                       # Maven build + dependencies
+├── Dockerfile                    # MySQL Docker image
 src/
-└── food_delivery_system/ 
-    │
-    ├── models/                 
+└── food_delivery_system/
+    ├── config/
+    │   ├── DatabaseConnection.java   # Singleton JDBC connection + schema init
+    │   ├── DatabaseHelper.java       # Generic singleton for executeQuery/executeUpdate
+    │   └── RowMapper.java            # Functional interface for ResultSet mapping
+    ├── models/
     │   ├── User.java
     │   ├── Customer.java
     │   ├── Driver.java
@@ -155,16 +212,16 @@ src/
     │   ├── Order.java
     │   ├── Review.java
     │   └── OrderStatus.java
-    │
-    ├── services/               
+    ├── services/
+    │   ├── AuditService.java         # Singleton, appends to audit.csv
     │   ├── FoodDeliveryService.java
     │   ├── OrderService.java
     │   ├── RestaurantService.java
     │   └── UserService.java
-    │
-    └── main/                   
+    └── main/
         └── Main.java
 ```
+
 
 ## 🗄️ Database Setup (MySQL & Docker)
 

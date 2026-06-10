@@ -1,20 +1,15 @@
 package food_delivery_system.models;
 
 public class Product {
-    private static int idGenerator = 0;
-    private final Integer id;
+    private int id;
     private String name;
     private String description;
     private double price;
     private int stock;
     private String imageUrl;
 
-    private Product() {
-        id = ++idGenerator;
-    }
 
     public Product(String name, String description, double price) {
-        this();
         setName(name);
         this.description = description;
         setPrice(price);
@@ -22,6 +17,18 @@ public class Product {
         this.imageUrl = null;
     }
 
+    public Product(int id, String name, String description, double price) {
+        this.id = id;
+        setName(name);
+        this.description = description;
+        setPrice(price);
+        this.stock = 0;
+        this.imageUrl = null;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public Integer getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }

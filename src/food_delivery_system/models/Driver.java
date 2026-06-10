@@ -10,9 +10,14 @@ public class Driver extends User{
         isAvailable = false;
     }
 
-    @Override
+    public Driver(int id,String firstName, String lastName, String phoneNumber, String email) {
+        super(id, firstName, lastName, phoneNumber, email);
+        vehicleType = "";
+        isAvailable = false;
+    }
+
     public String getFullName() {
-        return "Driver: " + getFirstName();
+        return "Driver: " + getFirstName() + " " + getLastName();
     }
 
     public String getVehicleType() {

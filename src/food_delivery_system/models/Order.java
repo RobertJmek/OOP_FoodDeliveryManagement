@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Order {
-    private static int idGenerator = 0;
-    private final int id;
+    private int id;
     private final Customer customer;
     private final Restaurant restaurant;
     private double totalPrice;
@@ -17,7 +16,7 @@ public class Order {
     private List<Product> products;
 
 
-    public Order(Customer customer, Restaurant restaurant, List<Product> products, double deliveryFee) {
+    public Order( Customer customer, Restaurant restaurant, List<Product> products, double deliveryFee) {
         if (customer == null) {
             throw new IllegalArgumentException("Comanda trebuie să aibă un client valid!");
         }
@@ -31,7 +30,6 @@ public class Order {
             throw new IllegalArgumentException("Taxa de livrare nu poate fi negativa!");
         }
 
-        this.id = ++idGenerator;
         this.customer = customer;
         this.restaurant = restaurant;
         this.products = new ArrayList<>(products);
@@ -41,6 +39,32 @@ public class Order {
         this.totalPrice = calculateTotalProducts(products); //  calcularea totalului comenzii
         this.status = OrderStatus.PENDING;
     }
+
+    public Order(int id, Customer customer, Restaurant restaurant, List<Product> products, double deliveryFee) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Comanda trebuie să aibă un client valid!");
+        }
+        if (restaurant == null) {
+            throw new IllegalArgumentException("Comanda trebuie să fie asociată unui restaurant!");
+        }
+        if (products == null || products.isEmpty()) {
+            throw new IllegalArgumentException("Comanda nu poate fi goala!");
+        }
+        if (deliveryFee < 0) {
+            throw new IllegalArgumentException("Taxa de livrare nu poate fi negativa!");
+        }
+
+        this.id = id;
+        this.customer = customer;
+        this.restaurant = restaurant;
+        this.products = new ArrayList<>(products);
+        this.discount = 0.0;
+        this.deliveryFee = deliveryFee;
+
+        this.totalPrice = calculateTotalProducts(products); //  calcularea totalului comenzii
+        this.status = OrderStatus.PENDING;
+    }
+
 
     private double calculateTotalProducts (List<Product> products) {
         double sum = 0;
@@ -90,6 +114,9 @@ public class Order {
         totalPrice += product.getPrice();
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }

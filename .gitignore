@@ -31,6 +31,10 @@ out/
 # OS/System files
 .DS_Store
 
+# Environment variables — never commit credentials!
+.env
+
+
 # Local database data directory
 mysql_data/
 

@@ -9,15 +9,19 @@ import java.util.Collections;
 
 public class Menu {
     private Map<String, List<Product>> products;
-    private static int idGenerator = 0;
-    private final int id;
+    private int id;
     private String name;
 
-    Menu(String name) {
-        id = ++idGenerator;
+    public Menu(String name) {
         products = new HashMap<>();
         this.name = name;
     }
+
+    public Menu(int id, String name) {
+        products = new HashMap<>();
+        this.id = id;
+    }
+
 
     public void addProduct(String category, Product product) {
         products.putIfAbsent(category, new ArrayList<>());
@@ -32,6 +36,9 @@ public class Menu {
         return new ArrayList<>(products.keySet());
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }

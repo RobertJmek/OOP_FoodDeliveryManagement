@@ -6,9 +6,9 @@ public class FoodDeliveryService {
     UserService userService;
 
     public FoodDeliveryService() {
-        this.orderService = new OrderService();
-        this.restaurantService = new RestaurantService();
         this.userService = new UserService();
+        this.restaurantService = new RestaurantService();
+        this.orderService = new OrderService(userService, restaurantService);
     }
 
     public OrderService getOrderService() {
@@ -22,6 +22,5 @@ public class FoodDeliveryService {
     public UserService getUserService() {
         return userService;
     }
-
 
 }
