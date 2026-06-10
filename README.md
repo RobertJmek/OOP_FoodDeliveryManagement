@@ -67,6 +67,35 @@ src/
         └── Main.java
 ```
 
+## 🗄️ Configurare Bază de Date (MySQL & Docker)
+
+Pentru a rula containerul bazei de date cu persistență a datelor, urmează acești pași:
+
+### 1. Construirea imaginii Docker
+Rulează următoarea comandă în rădăcina proiectului:
+```bash
+docker build -t delivery-db-img .
+```
+
+### 2. Pornirea containerului cu volum persistent
+Pornirea containerului folosind un volum Docker (`delivery_data`) pentru a reține datele chiar dacă ștergi containerul:
+```bash
+docker run -d \
+  --name delivery-db-container \
+  -p 3306:3306 \
+  -v delivery_data:/var/lib/mysql \
+  delivery-db-img
+```
+
+### 3. Date de conectare
+* **Host:** `localhost`
+* **Port:** `3306`
+* **Nume Bază de Date:** `delivery_management_db`
+* **Utilizator:** `delivery_user`
+* **Parolă:** `delivery_pass`
+* **Parolă Root:** `root_pass`
+
+
 # ENGLISH VERSION:
 
 ## Food Delivery Management System 🍔🚚
@@ -136,3 +165,32 @@ src/
     └── main/                   
         └── Main.java
 ```
+
+## 🗄️ Database Setup (MySQL & Docker)
+
+To run the database container with data persistence, follow these steps:
+
+### 1. Build the Database Image
+Run the following command in the project root:
+```bash
+docker build -t delivery-db-img .
+```
+
+### 2. Run the Database Container (Persistent)
+Start the container using a Docker volume (`delivery_data`) to retain data even if you delete the container:
+```bash
+docker run -d \
+  --name delivery-db-container \
+  -p 3306:3306 \
+  -v delivery_data:/var/lib/mysql \
+  delivery-db-img
+```
+
+### 3. Connection Credentials
+* **Host:** `localhost`
+* **Port:** `3306`
+* **Database Name:** `delivery_management_db`
+* **Username:** `delivery_user`
+* **Password:** `delivery_pass`
+* **Root Password:** `root_pass`
+
