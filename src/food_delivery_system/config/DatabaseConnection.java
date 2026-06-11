@@ -100,6 +100,17 @@ public class DatabaseConnection {
             )
             """,
 
+            // restaurant_managers (many-to-many: which managers administer which restaurant)
+            """
+            CREATE TABLE IF NOT EXISTS restaurant_managers (
+                restaurant_id INT NOT NULL,
+                manager_id    INT NOT NULL,
+                PRIMARY KEY (restaurant_id, manager_id),
+                FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
+                FOREIGN KEY (manager_id)    REFERENCES users(id)       ON DELETE CASCADE
+            )
+            """,
+
             // menus
             """
             CREATE TABLE IF NOT EXISTS menus (

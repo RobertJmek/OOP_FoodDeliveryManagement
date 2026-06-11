@@ -23,10 +23,6 @@ public class DatabaseHelper {
 
     /**
      * Executes an INSERT, UPDATE, or DELETE statement.
-     *
-     * @param sql    the SQL string with '?' placeholders
-     * @param params values to bind to the placeholders, in order
-     * @return the generated key (for INSERTs) or the number of affected rows
      */
     public int executeUpdate(String sql, Object... params) {
         Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -55,11 +51,6 @@ public class DatabaseHelper {
 
     /**
      * Executes a SELECT statement and maps each row to an object using the provided RowMapper.
-     *
-     * @param sql    the SQL string with '?' placeholders
-     * @param mapper a RowMapper that converts a ResultSet row into an object of type T
-     * @param params values to bind to the placeholders, in order
-     * @return a list of mapped objects (empty list if no rows found)
      */
     public <T> List<T> executeQuery(String sql, RowMapper<T> mapper, Object... params) {
         Connection conn = DatabaseConnection.getInstance().getConnection();

@@ -54,8 +54,4 @@ public class Customer extends User {
             throw new IllegalArgumentException("Adresa nu există în lista clientului!");
         }
     }
-
-    public String getFullName(){
-        return getFirstName() + " " + getLastName();
-    }
 }

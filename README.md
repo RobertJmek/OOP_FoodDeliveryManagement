@@ -123,6 +123,18 @@ docker run -d \
 * **Parolă:** `delivery_pass`
 * **Parolă Root:** `root_pass`
 
+### 4. Vizualizarea tuturor datelor din baza de date
+Pentru a afișa conținutul tuturor tabelelor (parcurge fiecare tabel și face `SELECT *`):
+```bash
+docker exec -e MYSQL_PWD=delivery_pass delivery-db-container sh -c \
+  'db=delivery_management_db; for t in $(mysql -N -udelivery_user "$db" -e "SHOW TABLES"); do echo "==== $t ===="; mysql -t -udelivery_user "$db" -e "SELECT * FROM \`$t\`"; done'
+```
+
+Sau deschide o consolă MySQL interactivă pentru a rula propriile interogări:
+```bash
+docker exec -it delivery-db-container mysql -udelivery_user -pdelivery_pass delivery_management_db
+```
+
 
 # ENGLISH VERSION:
 
@@ -250,4 +262,16 @@ docker run -d \
 * **Username:** `delivery_user`
 * **Password:** `delivery_pass`
 * **Root Password:** `root_pass`
+
+### 4. Viewing All Data in the Database
+To print the contents of every table (loops over each table and runs `SELECT *`):
+```bash
+docker exec -e MYSQL_PWD=delivery_pass delivery-db-container sh -c \
+  'db=delivery_management_db; for t in $(mysql -N -udelivery_user "$db" -e "SHOW TABLES"); do echo "==== $t ===="; mysql -t -udelivery_user "$db" -e "SELECT * FROM \`$t\`"; done'
+```
+
+Or open an interactive MySQL shell to run your own queries:
+```bash
+docker exec -it delivery-db-container mysql -udelivery_user -pdelivery_pass delivery_management_db
+```
 

@@ -78,4 +78,17 @@ public abstract class User {
     public String getFullName() {
         return String.format("%s %s", getFirstName(), getLastName());
     }
+
+    // Two users are the same if they share the same database id.
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User other)) return false;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 }

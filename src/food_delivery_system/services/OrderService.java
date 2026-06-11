@@ -48,7 +48,9 @@ public class OrderService {
 
         System.out.println("✅ Comanda #" + orderId + " plasată de " + customer.getFullName() + "!");
         System.out.println("💰 Total: " + newOrder.calculateTotalToPay() + " RON");
-        AuditService.getInstance().logAction("PLACE_ORDER");
+        AuditService.getInstance().logAction("PLACE_ORDER", customer,
+            "order #" + orderId + ", restaurant ID " + restaurant.getId()
+                + ", items=" + products.size() + ", total=" + newOrder.calculateTotalToPay() + " RON");
 
         return newOrder;
     }
@@ -89,7 +91,8 @@ public class OrderService {
             newStatus.name(), orderId
         );
         System.out.println("🔄 Statusul comenzii #" + orderId + " actualizat la: " + newStatus);
-        AuditService.getInstance().logAction("UPDATE_ORDER_STATUS");
+        AuditService.getInstance().logAction("UPDATE_ORDER_STATUS", null,
+            "order #" + orderId + ": " + order.getStatus().name() + " -> " + newStatus.name());
     }
 
     public void assignDriverToOrder(int orderId, Driver driver) {
@@ -105,7 +108,7 @@ public class OrderService {
             driver.getId(), OrderStatus.OUT_FOR_DELIVERY.name(), orderId
         );
         System.out.println("🚗 " + driver.getFullName() + " a preluat comanda #" + orderId + ".");
-        AuditService.getInstance().logAction("ASSIGN_DRIVER");
+        AuditService.getInstance().logAction("ASSIGN_DRIVER", driver, "order #" + orderId);
     }
 
     // DELETE

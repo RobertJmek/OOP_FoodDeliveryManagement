@@ -16,10 +16,6 @@ public class Driver extends User{
         isAvailable = false;
     }
 
-    public String getFullName() {
-        return "Driver: " + getFirstName() + " " + getLastName();
-    }
-
     public String getVehicleType() {
         return vehicleType;
     }

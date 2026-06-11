@@ -20,6 +20,7 @@ public class Menu {
     public Menu(int id, String name) {
         products = new HashMap<>();
         this.id = id;
+        this.name = name;
     }
 
 

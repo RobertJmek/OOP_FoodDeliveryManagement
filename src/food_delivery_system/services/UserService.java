@@ -53,7 +53,7 @@ public class UserService {
         }
 
         System.out.println("✅ " + type + " '" + user.getFullName() + "' înregistrat cu succes! (ID: " + generatedId + ")");
-        AuditService.getInstance().logAction("REGISTER_USER");
+        AuditService.getInstance().logAction("REGISTER_USER", user, "type=" + type + ", email=" + user.getEmail());
     }
 
     // READ

@@ -54,6 +54,7 @@ public class Main {
                     case 10 -> handleOrderHistory();
                     case 11 -> handleAddReview();
                     case 12 -> handleDisplayReviews();
+                    case 13 -> handleAddMenu();
                     default -> System.out.println(RED + "❌ Opțiune invalidă! Încearcă din nou." + RESET);
                 }
             } catch (Exception e) {
@@ -79,6 +80,7 @@ public class Main {
         System.out.println(PURPLE + " [10]" + RESET + " Istoric comenzi client");
         System.out.println(PURPLE + " [11]" + RESET + " Adăugare recenzie local");
         System.out.println(PURPLE + " [12]" + RESET + " Afișare recenzii local");
+        System.out.println(GREEN + " [13]" + RESET + " Adăugare meniu nou la restaurant (Manager)");
         System.out.println(RED + "  [0]" + RESET + " Ieșire din sistem");
         System.out.println(CYAN + BOLD + "=======================================================" + RESET);
     }
@@ -166,7 +168,29 @@ public class Main {
         double pPrice = readDouble("Preț (RON): ");
 
         Product p = new Product(pName, pDesc, pPrice);
-        restaurantService.addProductToRestaurantMenu(rId, mId, category, p);
+        restaurantService.addProductToRestaurantMenu(rId, mId, category, p, (Manager) mgr);
+    }
+
+    // --- 13. ADĂUGARE MENIU NOU ---
+    private static void handleAddMenu() {
+        System.out.println("\n--- Adăugare Meniu Nou ---");
+        int rId = readInt("ID Restaurant: ");
+
+        Restaurant r = restaurantService.getRestaurantById(rId);
+        if (r == null) {
+            System.out.println("❌ Restaurantul nu a fost găsit!");
+            return;
+        }
+
+        int managerId = readInt("ID-ul tău de Manager: ");
+        User mgr = userService.getUserById(managerId);
+        if (!(mgr instanceof Manager) || !r.getManagers().contains(mgr)) {
+            System.out.println("❌ Acțiune interzisă! Trebuie să fii manager al acestui local pentru a putea edita meniul.");
+            return;
+        }
+
+        String menuName = readString("Nume Meniu (ex: Meniu Principal): ");
+        restaurantService.addMenuToRestaurant(rId, menuName, (Manager) mgr);
     }
 
     // --- 4. INTEROGARE MENIU ---
@@ -190,7 +214,7 @@ public class Main {
                 }
             }
         }
-        AuditService.getInstance().logAction("QUERY_MENU");
+        AuditService.getInstance().logAction("QUERY_MENU", null, "restaurant '" + r.getName() + "' (ID " + rId + ")");
     }
 
     // --- 5. CĂUTARE RESTAURANT ---
@@ -209,7 +233,7 @@ public class Main {
                 System.out.println(" - ID " + r.getId() + " | " + r.getName() + " | " + r.getAddress());
             }
         }
-        AuditService.getInstance().logAction("SEARCH_RESTAURANT");
+        AuditService.getInstance().logAction("SEARCH_RESTAURANT", null, "keyword='" + keyword + "', results=" + found.size());
     }
 
     // --- 6. PLASARE COMANDĂ ---
@@ -272,20 +296,22 @@ public class Main {
                 .map(Order::getDriver)
                 .toList();
 
-        // Găsim toți șoferii din sistem care nu sunt în lista celor ocupați
-        List<User> drivers = userService.getAllUsers().stream()
+        // Șoferii disponibili: marcați ca disponibili în baza de date ȘI care nu sunt deja ocupați
+        List<Driver> drivers = userService.getAllUsers().stream()
                 .filter(u -> u instanceof Driver)
-                .filter(d -> !busyDrivers.contains((Driver) d))
+                .map(u -> (Driver) u)
+                .filter(Driver::isAvailable)
+                .filter(d -> !busyDrivers.contains(d))
                 .toList();
 
         if(drivers.isEmpty()) {
             System.out.println("Niciun șofer disponibil momentan.");
         } else {
-            for(User d : drivers) {
+            for(Driver d : drivers) {
                 System.out.println(" - " + d.getFullName() + " (ID: " + d.getId() + ")");
             }
         }
-        AuditService.getInstance().logAction("QUERY_AVAILABLE_DRIVERS");
+        AuditService.getInstance().logAction("QUERY_AVAILABLE_DRIVERS", null, "results=" + drivers.size());
     }
 
     // --- 8. ASIGNARE ȘOFER ---
@@ -334,7 +360,7 @@ public class Main {
                 System.out.println(" - Comanda #" + o.getId() + " | Local: " + o.getRestaurant().getName() + " | Status: " + o.getStatus() + " | Total: " + o.calculateTotalToPay() + " RON");
             }
         }
-        AuditService.getInstance().logAction("QUERY_ORDER_HISTORY");
+        AuditService.getInstance().logAction("QUERY_ORDER_HISTORY", null, "customer ID " + cId + ", orders=" + istoric.size());
     }
 
     // --- 11. ADĂUGARE RECENZIE ---
@@ -354,9 +380,8 @@ public class Main {
         String comment = readString("Text recenzie: ");
 
         Review rev = new Review((Customer) user, comment, rating);
-        r.addReview(rev);
+        restaurantService.addReviewToRestaurant(rId, rev);
         System.out.println("✅ Recenzia a fost salvată cu succes!");
-        AuditService.getInstance().logAction("ADD_REVIEW");
     }
 
     // --- 12. AFIȘARE RECENZII ---
@@ -375,7 +400,7 @@ public class Main {
                 System.out.println(" ⭐ " + rev.getRating() + "/5 | " + rev.getCustomer().getFullName() + " a scris: " + rev.getComment());
             }
         }
-        AuditService.getInstance().logAction("DISPLAY_REVIEWS");
+        AuditService.getInstance().logAction("DISPLAY_REVIEWS", null, "restaurant '" + r.getName() + "' (ID " + rId + "), reviews=" + revs.size());
     }
 
     // ==========================================
